@@ -1,4 +1,4 @@
-name: Build Firmware
+name: C/C++ CI
 
 on: [push]
 
@@ -8,16 +8,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install ARM Toolchain
+      - name: Install ARM GCC
         run: sudo apt-get update && sudo apt-get install -y gcc-arm-none-eabi
 
-      - name: Build with Make
-        run: make  # Або вкажіть шлях до папки з проектом, наприклад: cd projects/ASR6601CB-EVAL/examples/lora_p2p && make
-
-      - name: Upload Artifact
+      - name: Build
+        run: |
+          # Переходимо в папку з проектом P2P
+          cd projects/ASR6601CB-EVAL/examples/lora_p2p
+          # Запускаємо збірку
+          make
+          
+      - name: Upload firmware
         uses: actions/upload-artifact@v3
         with:
-          name: firmware
-          path: |
-            **/*.bin
-            **/*.hex
+          name: p2p-firmware
+          path: projects/ASR6601CB-EVAL/examples/lora_p2p/*.bin
