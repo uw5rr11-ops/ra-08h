@@ -1,0 +1,23 @@
+name: Build Firmware
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install ARM Toolchain
+        run: sudo apt-get update && sudo apt-get install -y gcc-arm-none-eabi
+
+      - name: Build with Make
+        run: make  # Або вкажіть шлях до папки з проектом, наприклад: cd projects/ASR6601CB-EVAL/examples/lora_p2p && make
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware
+          path: |
+            **/*.bin
+            **/*.hex
